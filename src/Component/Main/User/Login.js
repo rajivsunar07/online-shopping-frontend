@@ -1,6 +1,6 @@
 import { React, Component } from "react";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 class Login extends Component {
     constructor(props){
@@ -21,7 +21,7 @@ class Login extends Component {
         .then(res => {
             if(res.data.success){
                 localStorage.setItem('token', res.data.token);
-                this.props.history.push('/product')
+                this.props.history.push('/')
             }else{
                 console.log('Login failed')
             }
@@ -39,7 +39,11 @@ class Login extends Component {
     }
 
     render(){
+        if(localStorage.getItem('token')){
+            return <Redirect to='/product'/>
+        }
         return(
+            
             <div className="row  justify-content-center p-4 m-0">
                 
                 <div className="border col-5 p-4">
