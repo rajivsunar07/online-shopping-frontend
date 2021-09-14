@@ -42,6 +42,12 @@ export class Header extends Component {
                                 <NavLink to="#" className="nav-link" >{this.state.userName}</NavLink>
                             </li>
                             <li className="nav-item">
+                                <NavLink to="/cart" className="nav-link" >Cart</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/myorders" className="nav-link" >My orders</NavLink>
+                            </li>
+                            <li className="nav-item">
                                 <a href="" className="nav-link" onClick={this.logout}>Logout</a>
                             </li>
                           </>)
@@ -55,7 +61,7 @@ export class Header extends Component {
         return (
             <div>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <NavLink className="navbar-brand" to="/">Navbar</NavLink>
+                    <NavLink className="navbar-brand" to="/">Hamro Shop</NavLink>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
