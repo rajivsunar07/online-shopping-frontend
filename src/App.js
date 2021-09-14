@@ -1,25 +1,27 @@
 import './App.css';
-import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import SignUp from './Main/Registration/SignUp';
-import Login from './Main/Registration/Login';
-import Product from './Component/Product';
+import { BrowserRouter } from 'react-router-dom';
+
+import Header from './Component/Header/Header'
+import Main from './Component/Main/Main'
+import Sidebar from './Component/Sidebar/Sidebar'
+import Footer from './Component/Footer/Footer'
+
+import axios from 'axios'
+
+axios.defaults.baseURL = 'http://localhost:5000/' 
+axios.defaults.headers.get['Accept'] = 'application/json' 
+axios.defaults.headers.post['Accept'] = 'application/json'
 
 
 function App() {
   return (
-    <div>
-      <Router>  
-        <div className="App">
-          <Route path="/signup" component={SignUp}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/product" component={Product}/>
-        </div>
-      </Router>
-    </div>
+    <BrowserRouter>
+      <Header></Header>
+      <Main></Main>
+      <Sidebar></Sidebar>
+      <Footer></Footer>
+    </BrowserRouter>
   );
 }
 
-
 export default App;
-
-  // <
