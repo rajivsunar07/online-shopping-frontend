@@ -48,6 +48,15 @@ export class Header extends Component {
                                 <NavLink to="/myorders" className="nav-link" >My orders</NavLink>
                             </li>
                             <li className="nav-item">
+                                <NavLink to="/exchange/requests" className="nav-link" >Exchange Requests</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/myproducts" className="nav-link" >My Products</NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/orders" className="nav-link" >Orders (For seller)</NavLink>
+                            </li>
+                            <li className="nav-item">
                                 <a href="" className="nav-link" onClick={this.logout}>Logout</a>
                             </li>
                           </>)
