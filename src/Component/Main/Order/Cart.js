@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import '../Main.css'
 
 export class Cart extends Component {
     constructor(props) {
@@ -14,13 +15,14 @@ export class Cart extends Component {
             ordered: null,
             completed: null
         }
+
+        this.requestOrder = this.requestOrder.bind(this)
     }
 
     componentDidMount() {
 
          axios.get('/order/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
-                console.log(res.data.result)
                 if (res.data.result.length > 0) {
                     const order = res.data.result[0]
                     this.setState({
@@ -39,6 +41,24 @@ export class Cart extends Component {
             .catch(err => {
                 console.log(err)
             })
+    }
+
+    requestOrder(e){
+        e.preventDefault()
+        let data = {
+            'ordered': true
+        }    
+
+        axios.patch(`/order/${this.state._id}`, data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+        .then(res => {
+
+            console(res.data.success);
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+
     }
 
     render() {
@@ -71,8 +91,16 @@ export class Cart extends Component {
 
 
                         </div>
+                        <h3>Total price: {this.state.total_price}</h3>
+                        <div className="row">
+                            <button className="btn btn-success col-3" onClick={this.requestOrder}>Order</button>
+                        </div>
+                        
 
                     </div>
+                    
+
+                    
                 </div>
             </div>
         )
