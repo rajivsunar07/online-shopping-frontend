@@ -47,6 +47,42 @@ export class ProductDetail extends Component {
 
     }
 
+    addToCart = () => {
+        console.log(this.state)
+
+        let formdata = {
+            product: this.state._id,
+            quantity: '1',
+            price: this.state.price,
+            seller: this.state.sellerId
+        }
+
+        axios.post('/order/', formdata, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
+        .then(result => {
+            console.log(result.data.message);
+            console.log('Order created and item added sucessfully')
+        })
+        .catch()
+    
+    }
+
+    rent = () => {
+        let formdata = {
+            product: this.state._id,
+            quantity: '1',
+            price: this.state.price,
+            seller: this.state.sellerId,
+            for: 'rent'
+        }
+
+        axios.post('/order/', formdata, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
+        .then(result => {
+            console.log(result.data.message);
+            console.log('Order created and item added sucessfully')
+        })
+        .catch()
+    }
+
 
     render() {
         return (
@@ -62,6 +98,8 @@ export class ProductDetail extends Component {
                     <Link to={`/exchange/request/${this.state._id}/${this.state.sellerId}`}>
                        <button className="btn btn-primary">Request for exchange</button> 
                     </Link>
+                    <button className="btn btn-success" onClick={this.addToCart}>Add to cart</button>
+                    <button className="btn btn-warning" onClick={this.rent}>Rent</button>
                     
                 </div>
               
