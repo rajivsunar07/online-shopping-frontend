@@ -1,71 +1,103 @@
 import axios from 'axios'
 import { React, Component } from 'react'
-import { BrowserRouter as Router, NavLink, withRouter} from 'react-router-dom'
+import { BrowserRouter as Router, NavLink, withRouter } from 'react-router-dom'
 
 export class Header extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
 
         this.state = {
-            userName: null
+            userName: null,
+            for: 'buyer'
         }
 
     }
 
-    componentDidMount(){
-        if(localStorage.getItem('token')){
-            axios.get('http://localhost:5000/user/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }})
-            .then(res => {
-                this.setState({
-                    userName: res.data.user.name
+    componentDidMount() {
+        if (localStorage.getItem('token')) {
+            axios.get('http://localhost:5000/user/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+                .then(res => {
+                    this.setState({
+                        userName: res.data.user.name
+                    })
                 })
-            })
-
         }
     }
 
     logout = (e) => {
         e.preventDefault()
         localStorage.removeItem('token')
+        this.setState({
+            userName: null
+        })
         this.props.history.push('/')
     }
 
+    changeFor = (e) => {
+        e.preventDefault()
+
+        this.setState({
+            for: this.state.for == 'seller' ? 'buyer' : 'seller'
+        })
+    }
+
     render() {
-        if(localStorage.getItem('token')){
 
 
-            var links = (<>
-                            <li className="nav-item">
-                                <NavLink to="/product/create" className="nav-link" >Create product</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="#" className="nav-link" >{this.state.userName}</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/cart" className="nav-link" >Cart</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/myorders" className="nav-link" >My orders</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/exchange/requests" className="nav-link" >Exchange Requests</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/myproducts" className="nav-link" >My Products</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to="/orders" className="nav-link" >Orders (For seller)</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <a href="" className="nav-link" onClick={this.logout}>Logout</a>
-                            </li>
-                          </>)
-            
-        }else{
+        if (this.state.userName != null) {
+            var links = (
+            <>
+                <li className="nav-item">
+                    <a href="#" onClick={this.changeFor} className="nav-link" >Change to { this.state.for == 'seller' ? 'buyer' : 'seller' }</a>
+                </li>
+                <li className="nav-item">
+                    <NavLink to="#" className="nav-link" >{this.state.userName}</NavLink>
+                </li>
+                <li className="nav-item">
+                    <a href="#" className="nav-link" onClick={this.logout}>Logout</a>
+                </li>
+            </>
+            )
+
+            if (this.state.for == 'seller') {
+                var user_type_links = (<>
+                    <li className="nav-item">
+                        <NavLink to="/product/create" className="nav-link" >Create product</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink to="/myproducts" className="nav-link" >My Products</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink to="/orders" className="nav-link" >Orders (For seller)</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink to="/exchange/request/seller" className="nav-link" >Exchange Requests (Seller) </NavLink>
+                    </li>
+                </>)
+            }else if( this.state.for == 'buyer'){
+                var user_type_links = (
+                <>
+                    <li className="nav-item">
+                        <NavLink to="/cart" className="nav-link" >Cart</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink to="/myorders" className="nav-link" >My orders</NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink to="/exchange/request/user" className="nav-link" >Exchange Requests (Buyer) </NavLink>
+                    </li>
+    
+                </>)
+            }
+
+        } else {
             var links = <li className="nav-item">
-                            <NavLink exact className="nav-link" to="/login" >Login</NavLink>
-                        </li>
+                <NavLink exact className="nav-link" to="/login" >Login</NavLink>
+            </li>
         }
+
+
+        
 
         return (
             <div>
@@ -76,12 +108,13 @@ export class Header extends Component {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
+                            {user_type_links}
                             {links}
                         </ul>
                     </div>
                 </nav>
             </div>
-            
+
         )
     }
 }
