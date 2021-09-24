@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
+
 export class ProductCreate extends Component {
 
     constructor(props){
@@ -10,7 +11,7 @@ export class ProductCreate extends Component {
             name: null,
             price: null,
             description: null,
-            image: null
+            image: []
         }
     }
 
@@ -21,12 +22,17 @@ export class ProductCreate extends Component {
         data.append('name', this.state.name)
         data.append('price', this.state.price)
         data.append('description', this.state.description)
-        data.append('image', this.state.image)
 
-        axios.post('http://localhost:5000/product/', data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }})
+        for(let i=0; i < this.state.image.length ; i++){
+            data.append('image', this.state.image[i])
+        }
+
+        axios.post('/product/', data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }})
         .then(response => {
             if(response.data.success){ 
                 console.log(response.data.message)
+                
+                this.props.history.push('/myproducts/')
             }
         })
         .catch(err => {
@@ -42,7 +48,7 @@ export class ProductCreate extends Component {
 
     handleFile = (e) => {
         this.setState({
-            [e.target.name] : e.target.files[0]
+            [e.target.name] : e.target.files
         })
     }
 
@@ -68,6 +74,7 @@ export class ProductCreate extends Component {
                     </div>
                     
                     <button type="submit" className="btn btn-primary">Create Product</button>
+
                 </form>
             </div>
         )
