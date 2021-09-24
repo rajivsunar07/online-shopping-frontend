@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Link } from 'react-router-dom'
 
 export class MyProducts extends Component {
     constructor(props) {
@@ -40,6 +41,8 @@ export class MyProducts extends Component {
                                                 <th>Name</th>
                                                 <th>Price</th>
                                                 <th>Description</th>
+                                                <th>Action</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -52,6 +55,8 @@ export class MyProducts extends Component {
                                                             <td>{product.name}</td>
                                                             <td>{product.price}</td>
                                                             <td>{product.description}</td>
+                                                            <td> <Link to={`/product/update/${product._id}`}>Update</Link> </td>
+
                                                         </tr>
                                                     </>
                                                 )
