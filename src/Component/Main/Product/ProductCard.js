@@ -17,44 +17,20 @@ export class ProductCard extends Component {
             product: this.props.product._id,
             quantity: '1',
             price: this.props.product.price,
-            seller: this.props.product.user,
-            shipping_address: ' '
+            seller: this.props.product.user
         }
 
-        axios.get('/order/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
-        .then(res => {
-            if(res.data.result.length > 0){
-                axios.post('/order/item/', formdata, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
-                .then(result => {
-                    console.log(result.data.message)
-                })
-                .catch(err => {
-                    console.log(err)
-                    console.log('Error posting data')
-                })
-            }else{
-                axios.post('/order/', formdata, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
-                .then(result => {
-                    console.log(result.data.message);
-                    console.log('Order created and item added sucessfully')
-                })
-                .catch()
-            }
-
-            axios.post()
-            .then((result) => {
-                
-            }).catch((err) => {
-                
-            });
+        axios.post('/order/', formdata, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
+        .then(result => {
+            console.log(result.data.message);
+            console.log('Order created and item added sucessfully')
         })
-        .catch(res => {
-            console.log(res.data.message)
-        })
+        .catch()
 
     }
 
     render() {
+
         return (
             <div className="border p-4 m-4 col-3">
                 <Link to={this.link}>
@@ -67,6 +43,8 @@ export class ProductCard extends Component {
             
         
         )
+
+        
     }
 }
 
