@@ -12,18 +12,34 @@ export class MyProducts extends Component {
     }
 
     componentDidMount() {
-        axios.get('/product/user/all', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
-            .then(res => {
-                this.setState({
-                    products: res.data.result
-                })
-                console.log(this.state)
-            })
-            .catch(err => {
-                console.log('Error in getting products')
-            })
+        this.getProducts()
     }
 
+    getProducts() {
+        axios.get('/product/user/all', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+        .then(res => {
+            this.setState({
+                products: res.data.result
+            })
+            console.log(this.state)
+        })
+        .catch(err => {
+            console.log('Error in getting products')
+        })
+    }
+
+    deleteProduct(e, id) {
+        e.preventDefault()
+
+        axios.delete(`/product/${id}`, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+            .then(res => {
+                console.log(res.data.message)
+                this.getProducts()
+            })
+            .catch(err => {
+                console.log('Error in deleting products')
+            })
+    }
 
     render() {
         return (
@@ -42,7 +58,6 @@ export class MyProducts extends Component {
                                                 <th>Price</th>
                                                 <th>Description</th>
                                                 <th>Action</th>
-
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -51,11 +66,14 @@ export class MyProducts extends Component {
                                                     <>
                                                         <tr>
                                                             <td>{product._id}</td>
-                                                            <td><img src={`http://localhost:5000/`+ product.image[0]} alt="" /></td>
+                                                            <td><img src={`http://localhost:5000/` + product.image[0]} alt="" /></td>
                                                             <td>{product.name}</td>
                                                             <td>{product.price}</td>
                                                             <td>{product.description}</td>
-                                                            <td> <Link to={`/product/update/${product._id}`}>Update</Link> </td>
+                                                            <td>
+                                                                <Link className="btn btn-primary " to={`/product/update/${product._id}`}>Update</Link>
+                                                                <button className="btn btn-danger" onClick={(e) => this.deleteProduct(e, product._id)}>Delete</button>
+                                                            </td>
 
                                                         </tr>
                                                     </>
