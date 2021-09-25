@@ -9,13 +9,15 @@ export class MyProducts extends Component {
         this.state = {
             products: []
         }
+
+        this.getProducts = this.getProducts.bind(this)
     }
 
     componentDidMount() {
         this.getProducts()
     }
 
-    getProducts() {
+    getProducts = () => {
         axios.get('/product/user/all', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
         .then(res => {
             this.setState({
@@ -34,11 +36,12 @@ export class MyProducts extends Component {
         axios.delete(`/product/${id}`, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
                 console.log(res.data.message)
-                this.getProducts()
+                
             })
             .catch(err => {
                 console.log('Error in deleting products')
             })
+        this.getProducts()
     }
 
     render() {
