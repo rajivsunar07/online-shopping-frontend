@@ -11,40 +11,43 @@ export class ExchangeRequests extends Component {
             requests: []
         }
 
+        this.getExchangeProducts = this.getExchangeProducts.bind(this)
     }
 
     componentDidMount() {
+        this.getExchangeProducts()
+    }
 
+    getExchangeProducts = () => {
         axios.get(`/exchangeProduct/${this.props.match.params.for}`, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
-            .then(res => {
-                this.setState({
-                    requests: res.data.result
-                })
+        .then(res => {
+            this.setState({
+                requests: res.data.result
+            })
 
-            })
-            .catch(err => {
-                console.log('Error in getting exchange requests')
-            })
+        })
+        .catch(err => {
+            console.log('Error in getting exchange requests')
+        })
     }
 
 
 
-
-    changeStatus(id, status) {
+    changeStatus = (id, status) => {
         let data = {
             status: status
         }
         axios.patch(`/exchangeProduct/${id}`, data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
                 console.log(res.data.success)
-                this.componentDidMount()
+                this.getExchangeProducts()
             })
             .catch(err => {
                 console.log(err)
             })
     }
 
-    deleteExchange(e, id){
+    deleteExchange = (e, id) => {
         axios.delete(`/exchangeProduct/${id}`, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
                 console.log(res.data.success)
@@ -55,7 +58,7 @@ export class ExchangeRequests extends Component {
             })
     }
 
-    addToCart(e, request){
+    addToCart = (e, request) => {
         let formdata = {
             product: request.exchangeFor._id,
             quantity: '1',
@@ -69,8 +72,11 @@ export class ExchangeRequests extends Component {
         .then(result => {
             console.log(result.data.message);
             console.log('Order item added sucessfully')
+            this.getExchangeProducts()
+
         })
         .catch()
+
     }
     
 
@@ -119,7 +125,7 @@ export class ExchangeRequests extends Component {
                                                                 <>
                                                                     <button className="btn btn-warning" onClick={(e) => this.addToCart(e, request)}>Add to cart</button>
                                                                     <button className="btn btn-danger" onClick={(e) => this.deleteExchange(e, request._id)}>Delete</button>
-                                                                </>): <button className="btn btn-danger" onClick={(e) => this.deleteExchange(e, request._id)}>Delete</button>) : <></>}
+                                                                </>): <>Added to cart</>) : <></>}
                                                                 
                                                             </td>
 
