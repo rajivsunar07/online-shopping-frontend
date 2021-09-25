@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import '../Main.css'
 
 export class Cart extends Component {
     constructor(props) {
@@ -8,12 +7,11 @@ export class Cart extends Component {
 
         this.state = {
             _id: null,
-            item: [],
+            items: [],
             total_price: null,
             user: null,
             shipping_address: null,
-            ordered: null,
-            completed: null
+            status: null
         }
 
         this.requestOrder = this.requestOrder.bind(this)
@@ -21,19 +19,23 @@ export class Cart extends Component {
 
     componentDidMount() {
 
-         axios.get('/order/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+        this.getCart()
+    }
+
+    getCart = () => {
+        axios.get('/order/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
                 if (res.data.result.length > 0) {
                     const order = res.data.result[0]
                     this.setState({
                         _id: order._id,
-                        item: order.item,
+                        items: order.item,
                         total_price: order.total_price,
                         user: order.user,
                         shipping_address: order.shipping_address,
-                        ordered: order.ordered
+                        status: order.status
                     })
-
+                    console.log(this.state)
                 } else {
                     console.log('Nothing added to cart currently')
                 }
@@ -43,20 +45,21 @@ export class Cart extends Component {
             })
     }
 
-    requestOrder(e){
+    requestOrder(e) {
         e.preventDefault()
         let data = {
-            'ordered': true
-        }    
+            'status': 'ordered'
+        }
 
         axios.patch(`/order/${this.state._id}`, data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
-        .then(res => {
+            .then(res => {
+                console.log(res.data.success);
+            })
+            .catch(err => {
+                console.log(err)
+            })
 
-            console(res.data.success);
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        this.getCart()
 
 
     }
@@ -65,42 +68,46 @@ export class Cart extends Component {
         return (
             <div>
                 <div className="card">
-                    <div className="row">
-                        <div className="col-md-8 cart">
-                            <div className="title">
+                    <div className="d-flex justify-content-center row">
+                        <div className="col-md-10">
+                            <div className="rounded">
+                                <div className="table-responsive table-borderless">
+                                    <table className="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Product name</th>
+                                                <th>Image</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>For</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {this.state.items.map(item => {
+                                                return (
+                                                <tr>
+                                                        <td>{item.product.name}</td>
+                                                        <td className="col-2"><img className="img-fluid" src={'http://localhost:5000/' + item.product.image[0]}></img></td>
+                                                        <td className="col">
+                                                            <div className="row text-muted">{item.product.price}</div>
+                                                        </td>
+                                                        <td className="col"> <a href="#">-</a><a href="#" className="border">{item.quantity}</a><a href="#">+</a> </td>
+                                                        <td className="col">&#x20A8; <span className="close">{item.for}</span></td>
+                                                </tr>)
+                                            })}
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <h3>Total price: {this.state.total_price}</h3>
                                 <div className="row">
-                                    <div className="col">
-                                        <h4><b>Shopping Cart</b></h4>
-                                    </div>
-                                    <div className="col align-self-center text-right text-muted"></div>
+                                    <button className="btn btn-success col-3" onClick={this.requestOrder}>Order</button>
                                 </div>
                             </div>
-
-                            {this.state.item.map(i => {
-                                return (<div className="row border-top border-bottom">
-                                    <div className="row main align-items-center">
-                                        <div className="col-2"><img className="img-fluid" src={'http://localhost:5000/' + i.product.image[0]}></img></div>
-                                        <div className="col">
-                                            <div className="row text-muted">{i.product.name}</div>
-                                        </div>
-                                        <div className="col"> <a href="#">-</a><a href="#" className="border">{i.quantity}</a><a href="#">+</a> </div>
-                                        <div className="col">&#x20A8; <span className="close">{i.price}</span></div>
-                                    </div>
-                                </div>)
-                            })}
-
-
                         </div>
-                        <h3>Total price: {this.state.total_price}</h3>
-                        <div className="row">
-                            <button className="btn btn-success col-3" onClick={this.requestOrder}>Order</button>
-                        </div>
-                        
-
                     </div>
-                    
-
-                    
                 </div>
             </div>
         )
