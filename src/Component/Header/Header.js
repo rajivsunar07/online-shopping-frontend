@@ -8,7 +8,8 @@ export class Header extends Component {
 
         this.state = {
             userName: null,
-            for: 'buyer'
+            for: localStorage.getItem('for'),
+            is_admin: null
         }
 
     }
@@ -18,10 +19,14 @@ export class Header extends Component {
             axios.get('http://localhost:5000/user/', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
                 .then(res => {
                     this.setState({
-                        userName: res.data.user.name
+                        userName: res.data.user.name,
+                        is_admin: res.data.user.is_admin
                     })
                 })
+
+            localStorage.setItem('for', 'buyer')    
         }
+
     }
 
     logout = (e) => {
@@ -36,8 +41,9 @@ export class Header extends Component {
     changeFor = (e) => {
         e.preventDefault()
 
+        localStorage.setItem('for', this.state.for == 'seller' ? 'buyer' : 'seller')
         this.setState({
-            for: this.state.for == 'seller' ? 'buyer' : 'seller'
+            for: localStorage.getItem('for')
         })
     }
 
@@ -51,7 +57,7 @@ export class Header extends Component {
                     <a href="#" onClick={this.changeFor} className="nav-link" >Change to { this.state.for == 'seller' ? 'buyer' : 'seller' }</a>
                 </li>
                 <li className="nav-item">
-                    <NavLink to="#" className="nav-link" >{this.state.userName}</NavLink>
+                    <NavLink to="/profile" className="nav-link" >{this.state.userName}</NavLink>
                 </li>
                 <li className="nav-item">
                     <a href="#" className="nav-link" onClick={this.logout}>Logout</a>
@@ -96,6 +102,12 @@ export class Header extends Component {
             </li>
         }
 
+        if(this.state.is_admin == true){
+            var admin_links = <li className="nav-item">
+            <NavLink exact className="nav-link" to="/orders/all" >All orders</NavLink>
+        </li>
+
+        }
 
         
 
@@ -110,6 +122,7 @@ export class Header extends Component {
                         <ul className="navbar-nav">
                             {user_type_links}
                             {links}
+                            {admin_links}
                         </ul>
                     </div>
                 </nav>
