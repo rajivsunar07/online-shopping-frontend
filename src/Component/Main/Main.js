@@ -14,6 +14,10 @@ import ExchangeRequests from './Order/ExchangeRequests';
 
 import MyProducts from './Product/MyProducts';
 import Orders from './Order/Orders';
+import OrdersAdmin from './Order/OrdersAdmin';
+import Profile from './User/Profile';
+import ProfileUpdateForm from './User/ProfileUpdateForm';
+import ChangePasswordForm from './User/ChangePasswordForm';
 
 
 
@@ -26,6 +30,9 @@ export class Main extends Component {
                     <Switch>
                         <Route exact path="/signup" component={SignUp} />
                         <Route exact path="/login" component={Login}/>
+                        <Route exact path="/profile" component={Profile}/>
+                        <Route exact path="/profile/update/:id" component={ProfileUpdateForm}/>
+                        <Route exact path="/profile/password/" component={ChangePasswordForm}/>
 
                         <Route exact path="/" component={Product} />
                         <Route exact path="/product/create" component={ProductCreate} />
@@ -36,6 +43,7 @@ export class Main extends Component {
                         <Route exact path="/cart" component={Cart}/>
                         <Route exact path="/myorders" component={MyOrders}/>
                         <Route exact path="/orders" component={Orders}/>
+                        <Route exact path="/orders/all" component={OrdersAdmin}/>
 
                         <Route exact path="/exchange/request/:id/:sellerId" component={ExchangeRequestForm}/>
                         <Route exact path="/exchange/request/:for" render={(props) => (<ExchangeRequests key={props.match.params.for}></ExchangeRequests>)} />
