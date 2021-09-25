@@ -14,10 +14,6 @@ export class ExchangeRequestForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    componentDidMount(){
-        console.log(this.state);
-    }
-
     handleSubmit(e) {
         e.preventDefault()
 
@@ -27,12 +23,13 @@ export class ExchangeRequestForm extends Component {
         data.append('description', this.state.description)
         data.append('image', this.state.image)
         data.append('exchangeFor', this.props.match.params.id)
-        data.append('exchange', this.props.match.params.sellerId)
+        data.append('seller', this.props.match.params.sellerId)
 
         axios.post('/exchangeProduct/', data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(response => {
                 if (response.data.success) {
                     console.log(response.data.message)
+                    this.props.history.push('/exchange/request/user')
                 }
             })
             .catch(err => {
