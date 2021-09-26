@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 
+import { store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css';
 
 export class ProductCreate extends Component {
 
@@ -35,7 +38,16 @@ export class ProductCreate extends Component {
         axios.post('/product/', data, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(response => {
                 if (response.data.success) {
-                    console.log(response.data.message)
+                    store.addNotification({
+                        message: 'Product created succesfully',
+                        type: 'success',                      
+                        container: 'bottom-left',
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 3000
+                        }
+                    })
 
                     this.props.history.push('/myproducts/')
                 }
@@ -60,7 +72,7 @@ export class ProductCreate extends Component {
     handleSelect = (e) => {
         let forList = this.state.for
 
-        if(e.target.checked) forList.push(e.target.id)
+        if (e.target.checked) forList.push(e.target.id)
         else forList.splice(forList.indexOf(e.target.id), 1)
 
         this.setState({
@@ -72,8 +84,11 @@ export class ProductCreate extends Component {
 
     render() {
         return (
-            <div className="container border p-4">
-                <form onSubmit={this.handleSubmit}>
+            <div className="container border p-4 shadow mt-4">
+                <h4 className="m-4">Create a product <i class="fas fa-plus-circle text-success"></i></h4>
+
+                <hr className="m-4  " />
+                <form onSubmit={this.handleSubmit} className="mt-4 pt-1">
                     <div className="form-group m-4">
                         <input type="text" className="form-control" placeholder="Name" name="name" onChange={this.handleChange} />
                     </div>
@@ -81,7 +96,7 @@ export class ProductCreate extends Component {
                         <input type="text" className="form-control" placeholder="Price" name="price" onChange={this.handleChange} />
                     </div>
                     <div className="form-group m-4">
-                        <input type="text" className="form-control" placeholder="description" name="description" onChange={this.handleChange} />
+                        <textarea type="text" className="form-control" placeholder="Description" name="description" onChange={this.handleChange} />
                     </div>
                     <div className="form-group m-4">
                         <label htmlFor="image">Image</label>
@@ -94,7 +109,7 @@ export class ProductCreate extends Component {
                     <div className="form-group m-4">
 
                         <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="checkbox" id="sell" value="sell" onChange={this.handleSelect}/>
+                            <input className="form-check-input" type="checkbox" id="sell" value="sell" onChange={this.handleSelect} />
                             <label className="form-check-label" for="sell">Sell</label>
                         </div>
                         <div className="form-check form-check-inline">
@@ -107,6 +122,7 @@ export class ProductCreate extends Component {
                         </div>
                     </div>
 
+                  
 
                     <div className="form-group m-4">
 
@@ -114,6 +130,7 @@ export class ProductCreate extends Component {
                     </div>
 
                 </form>
+
             </div>
         )
     }
