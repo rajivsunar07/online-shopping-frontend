@@ -2,6 +2,11 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 
+
+import { store } from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+import 'animate.css';
+
 export class MyProducts extends Component {
     constructor(props) {
         super(props)
@@ -35,13 +40,25 @@ export class MyProducts extends Component {
 
         axios.delete(`/product/${id}`, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
-                console.log(res.data.message)
+                store.addNotification({
+                    message: 'Product deleted',
+                    type: 'success',                      
+                    container: 'bottom-left',
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 3000
+                    }
+                })
+
+            this.getProducts()
+
                 
             })
             .catch(err => {
                 console.log('Error in deleting products')
             })
-        this.getProducts()
+
     }
 
     render() {
@@ -49,7 +66,7 @@ export class MyProducts extends Component {
             <div>
                 <div className="container mt-5">
                     <div className="d-flex justify-content-center row">
-                        <div className="col-md-10">
+                        <div className="col-md-10 border shadow p-4">
                             <div className="rounded">
                                 <div className="table-responsive table-borderless">
                                     <table className="table">
@@ -68,8 +85,8 @@ export class MyProducts extends Component {
                                                 return (
                                                     <>
                                                         <tr>
-                                                            <td>{product._id}</td>
-                                                            <td><img src={`http://localhost:5000/` + product.image[0]} alt="" /></td>
+                                                            <td> <Link to={`/product/${product._id}`}>{product._id}</Link> </td>
+                                                            <td><img src={`http://localhost:5000/` + product.image[0]} alt="" className="tableImage"/></td>
                                                             <td>{product.name}</td>
                                                             <td>{product.price}</td>
                                                             <td>{product.description}</td>
