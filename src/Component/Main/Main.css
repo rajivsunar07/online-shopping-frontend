@@ -1,0 +1,29 @@
+.main{
+    position: absolute;
+    width: 90%;
+    right: 20px;
+}
+
+.signupbtn{
+    background-color: coral;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 2%;
+}
+
+.productLink {
+    text-decoration: none;
+}
+
+.productCardImage {
+    height: 90px;
+}
+
+
+.tableImage {
+    height: 100px;
+}
+
+
+
