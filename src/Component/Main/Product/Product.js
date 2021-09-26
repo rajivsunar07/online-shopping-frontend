@@ -27,15 +27,10 @@ export class Product extends Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
-
-                    {/* looping through the list of products */}
+            <div className="m-4">
+                <div className="row justify-content-center">
                     {this.state.products.map( product => {
-                        // the design of the product
-                        // key is just necessary
-                        // product={product} is how to send data 
-                        return <ProductCard key={product.productId} product={product}></ProductCard>  
+                        return <ProductCard key={product._id} product={product}></ProductCard>  
                     })}
                 </div>
             </div>
