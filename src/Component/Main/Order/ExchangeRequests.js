@@ -24,7 +24,6 @@ export class ExchangeRequests extends Component {
             this.setState({
                 requests: res.data.result
             })
-            console.log(requests)
         })
         .catch(err => {
             console.log('Error in getting exchange requests')
