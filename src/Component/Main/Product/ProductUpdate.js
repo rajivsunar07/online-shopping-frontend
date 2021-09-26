@@ -30,7 +30,7 @@ export class ProductUpdate extends Component {
                     description: product.description,
                     price: product.price
                 })
-            console.log(this.state.image);
+                console.log(this.state.image);
             })
             .catch(err => {
                 console.log(err)
@@ -49,17 +49,15 @@ export class ProductUpdate extends Component {
         data.append('image', this.state.image)
 
 
-        for(let i=0; i < this.state.newImages.length ; i++){
+        for (let i = 0; i < this.state.newImages.length; i++) {
             data.append('newImages', this.state.newImages[i])
         }
 
-        axios.patch(`http://localhost:5000/product/${this.state._id}`, data, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        axios.patch(`/product/${this.state._id}`, data, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
             .then(res => {
-                console.log(res)
                 this.props.history.push('/myproducts')
             })
             .catch(err => {
-                console.log(err)
             })
     }
 
@@ -77,10 +75,10 @@ export class ProductUpdate extends Component {
     }
 
     removeImage = (e, index) => {
-        e.preventDefault()  
+        e.preventDefault()
         let array = this.state.image
 
-        if(array.length == 1) array = []
+        if (array.length == 1) array = []
         else array.splice(index, 1)
 
         this.setState({
@@ -91,7 +89,11 @@ export class ProductUpdate extends Component {
 
     render() {
         return (
-            <div className="container border p-4">
+            <div className="container border p-4 mt-4">
+
+                <h4 className="m-4">Update a product</h4>
+
+                <hr className="m-4  " />
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group m-4">
                         <input type="text" className="form-control" placeholder="Name" name="name" onChange={this.handleChange} value={this.state.name} />
@@ -108,18 +110,29 @@ export class ProductUpdate extends Component {
                     </div>
                     <div className="row">
                         {this.state.image.map((img, i) => {
-                            return(
-                                <div className="col-4">
-                                    <img src={`http://localhost:5000/${img}`} alt="" />
-                                    <br />
-                                    <button className="btn btn-danger text-center" onClick={(e) => this.removeImage(e ,i)}>Remove</button>
+                            return (
+                                <div className="col-4 ">
+                                    <div className="row justify-content-center">
+                                        <img src={`http://localhost:5000/${img}`} alt="" className="col-8"/> 
+
+                                    </div>
+                                    <div className="row justify-content-center">
+                                        <button className="btn btn-danger col-6" onClick={(e) => this.removeImage(e, i)}>Remove</button>
+
+                                    </div>
+                                
+                                   
+
                                 </div>
                             )
                         })}
 
                     </div>
-                    
-                    <button type="submit" className="btn btn-primary">Update Product</button>
+
+                    <div className="form-group m-4">
+
+                        <button type="submit" className="btn btn-primary">Update Product</button>
+                    </div>
                 </form>
             </div>
         )
