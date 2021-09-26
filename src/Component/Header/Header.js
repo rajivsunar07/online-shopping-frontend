@@ -112,9 +112,6 @@ export class Header extends Component {
             var admin_links = (<><li className="nav-item">
                 <NavLink exact className="nav-link" to="/orders/all" >All orders</NavLink>
             </li>
-                <li className="nav-item">
-                    <NavLink exact className="nav-link" to="/category" >Categories</NavLink>
-                </li>
             </>
             )
 
