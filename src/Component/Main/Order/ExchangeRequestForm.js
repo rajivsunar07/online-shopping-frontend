@@ -54,23 +54,34 @@ export class ExchangeRequestForm extends Component {
 
     render() {
         return (
-            <div className="row justify-content-center">
-                <form onSubmit={this.handleSubmit} className="col-6">
-                    <div className="form-group m-4">
-                        <input type="text" className="form-control" placeholder="Name" name="name" onChange={this.handleChange} required />
-                    </div>
-                    <div className="form-group m-4">
-                        <input type="text" className="form-control" placeholder="Description" name="description" onChange={this.handleChange} required />
-                    </div>
-                    <div className="form-group m-4">
-                        <label htmlFor="image">Image</label>
-                        <input type="file" className="form-control" name="image" onChange={this.handleFile} multiple required />
-                    </div>
-                    <div className="row justify-content-center">
-                        <button type="submit" className="btn btn-primary col-4">Request for exchange</button>
-                    </div>
+            <div className="">
+                <div className="row justify-content-center">
+                <div className="col-10 border shadow p-4 mt-3 ml-auto mr-auto align-self-center">
+                    <h4 className="m-4">Exchange a product</h4>
 
-                </form>
+                    <hr className="m-4 " />
+                    <form onSubmit={this.handleSubmit} className="">
+                        <div className="form-group m-4">
+                            <input type="text" className="form-control" placeholder="Name" name="name" onChange={this.handleChange} required />
+                        </div>
+                        <div className="form-group m-4">
+                            <input type="text" className="form-control" placeholder="Description" name="description" onChange={this.handleChange} required />
+                        </div>
+                        <div className="form-group m-4">
+                            <label htmlFor="image">Image</label>
+                            <input type="file" className="form-control" name="image" onChange={this.handleFile} multiple required />
+                        </div>
+                        <div className="row justify-content-center">
+                            <button type="submit" className="btn btn-primary col-4">Request for exchange</button>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+
+
+
+
             </div>
         )
     }
