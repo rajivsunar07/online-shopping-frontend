@@ -21,12 +21,14 @@ import ChangePasswordForm from './User/ChangePasswordForm';
 
 
 
+import './Main.css'
+import Checkout from './Order/Checkout';
 
 
 export class Main extends Component {
     render() {
         return (
-            <div>
+            <main className="">
                     <Switch>
                         <Route exact path="/signup" component={SignUp} />
                         <Route exact path="/login" component={Login}/>
@@ -44,6 +46,7 @@ export class Main extends Component {
                         <Route exact path="/myorders" component={MyOrders}/>
                         <Route exact path="/orders" component={Orders}/>
                         <Route exact path="/orders/all" component={OrdersAdmin}/>
+                        <Route exact path="/orders/checkout/:id" component={Checkout}/>
 
                         <Route exact path="/exchange/request/:id/:sellerId" component={ExchangeRequestForm}/>
                         <Route exact path="/exchange/request/:for" render={(props) => (<ExchangeRequests key={props.match.params.for}></ExchangeRequests>)} />
@@ -51,7 +54,7 @@ export class Main extends Component {
 
 
                     </Switch>
-            </div>
+            </main>
         )
     }
 
