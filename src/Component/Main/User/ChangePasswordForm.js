@@ -13,6 +13,7 @@ export class ChangePasswordForm extends Component {
     }
 
     changePassword = (e) => {
+        e.preventDefault()
         if(this.state.newPassword != this.state.confirmPassword ){
             console.log('Password donot match')
             return
@@ -25,7 +26,7 @@ export class ChangePasswordForm extends Component {
 
         axios.patch('/user/password', data, {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}})
         .then(res => {
-            console.log(res.data.success)
+            this.props.history.push('/profile')
         })
         .catch(res => {
             console.log(res.data.err)
@@ -44,7 +45,12 @@ export class ChangePasswordForm extends Component {
     render() {
         return (
             <div>
-                <form className="m-4 p-4">
+                <div className="border shadow m-4 p-4">
+                <h4 className="m-4">Change Password</h4>
+                <hr />
+ 
+
+                <form className="m-4 p-4 ">
                     <div class="mb-3">
                         <input type="password" className="form-control" placeholder="Enter current password" name="password" onChange={this.handleChange} />
                     </div>
@@ -56,6 +62,8 @@ export class ChangePasswordForm extends Component {
                     </div>
                     <button type="submit" className="btn btn-info" onClick={this.changePassword}>Change Password</button>
                 </form>
+                </div>
+
             </div>
         )
     }
