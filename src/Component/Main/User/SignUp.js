@@ -5,7 +5,7 @@ import { store } from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import 'animate.css';
 
-import '../Main.css'
+
 import { Link } from "react-router-dom";
 
 class SignUp extends Component {
@@ -124,7 +124,7 @@ class SignUp extends Component {
                                     <input type="password" className="form-control" placeholder="Confirm Password" name="confirmPassword" onChange={this.handleChange} />
                                 </div>
                                 <div className="row justify-content-center m-4  ">
-                                    <button type="submit" className="signupbtn col-10 mt-4">Sign Up</button>
+                                    <button type="submit" className="signupbtn col-12 m-4">Sign Up</button>
                                 </div>
                                 <div className="row justify-content-center m-4 ">
                                     <h5 className="text-center">Already have an account?</h5>
