@@ -24,7 +24,7 @@ export class ExchangeRequests extends Component {
             this.setState({
                 requests: res.data.result
             })
-
+            console.log(requests)
         })
         .catch(err => {
             console.log('Error in getting exchange requests')
@@ -70,9 +70,16 @@ export class ExchangeRequests extends Component {
     
         axios.post('/order/', formdata, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
         .then(result => {
-            console.log(result.data.message);
-            console.log('Order item added sucessfully')
-            this.getExchangeProducts()
+            axios.patch(`/exchangeProduct/${request._id}`, {status: 'added to cart'}, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token')}})
+            .then(r => {
+                console.log(r.data.success)
+                this.getExchangeProducts()
+
+            })
+            .catch(err => [
+                console.log(err)
+            ])
+
 
         })
         .catch()
@@ -85,7 +92,7 @@ export class ExchangeRequests extends Component {
             <div>
                 <div className="container mt-5">
                     <div className="d-flex justify-content-center row">
-                        <div className="col-md-10">
+                        <div className="col-md-12 border shadow p-3">
                             <div className="rounded">
                                 <div className="table-responsive table-borderless">
                                     <table className="table">
@@ -94,11 +101,11 @@ export class ExchangeRequests extends Component {
                                                 <th>Exchange #</th>
                                                 <th>Product name</th>
                                                 <th>Image</th>
-                                                <th>Description</th>
                                                 <th>Exchange For</th>
                                                 <th>Image</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
+                                                {this.props.match.params.for == "user" ?  <th>Action</th>: <></> }
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -108,16 +115,15 @@ export class ExchangeRequests extends Component {
                                                         <tr>
                                                             <td>{request._id}</td>
                                                             <td>{request.name}</td>
-                                                            <td><img src={`http://localhost:5000/` + request.image[0]} alt="" /></td>
-                                                            <td>{request.description}</td>
+                                                            <td><img src={`http://localhost:5000/` + request.image[0]} alt="" className="tableImage" /></td>
                                                             <td>{request.exchangeFor.name}</td>
-                                                            <td><img src={`http://localhost:5000/` + request.exchangeFor.image[0]} alt="" /></td>
+                                                            <td><img src={`http://localhost:5000/` + request.exchangeFor.image[0]} className="tableImage"/></td>
                                                             <td>
                                                                 {this.props.match.params.for == 'user' ? request.status : (
                                                                     request.status == 'pending' ? (<>
                                                                         <button className="btn btn-success" onClick={() => this.changeStatus(request._id, 'accepted')}>Accept</button>
                                                                         <button className="btn btn-danger" onClick={() => this.changeStatus(request._id, 'rejected')}>Reject</button>
-                                                                    </>) : request.status
+                                                                    </>) : (request.status == "added to cart" ? <>accepted</> : request.status)
                                                                 )}
                                                             </td>
                                                             <td>
@@ -125,7 +131,7 @@ export class ExchangeRequests extends Component {
                                                                 <>
                                                                     <button className="btn btn-warning" onClick={(e) => this.addToCart(e, request)}>Add to cart</button>
                                                                     <button className="btn btn-danger" onClick={(e) => this.deleteExchange(e, request._id)}>Delete</button>
-                                                                </>): <>Added to cart</>) : <></>}
+                                                                </>): <>{request.status}</>) : <></>}
                                                                 
                                                             </td>
 
