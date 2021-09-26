@@ -7,7 +7,6 @@ export class MyOrders extends Component {
 
         this.state = {
             orders: [],
-
         }
     }
 
@@ -20,7 +19,7 @@ export class MyOrders extends Component {
                     })
                     console.log(this.state)
                 } else {
-                    alert('No orders')
+                    console.log('No orders')
                 }
             })
             .catch(err => {
@@ -31,42 +30,75 @@ export class MyOrders extends Component {
     render() {
         return (
             <div>
-                <div className="container mt-5">
-                    <div className="d-flex justify-content-center row">
-                        <div className="col-md-10">
-                            <div className="rounded">
-                                <div className="table-responsive table-borderless">
-                                    <table className="table">
+                <div className="container mt-5 ">
+
+                    {this.state.orders.map(order => {
+                        return (
+                            <>
+                                <div className="row border shadow m-3 p-4">
+                                    <h3>OrderId: {order._id}</h3>
+                                    <h4>Total Price: {order.total_price}</h4>
+
+                                    <h4>Items:</h4>
+                                    <div className="table-responsive">
+
+                                    
+
+                                    <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>Order #</th>
-                                                <th>Company name</th>
-                                                <th>Completed</th>
-                                                <th>Total</th>
+                                                <th scope="col">Item Name</th>
+                                                <th scope="col">Image</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Total Price</th>
+                                                <th scope="col">For</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
-                                            {this.state.orders.map(order => {
+                                            {order.item.map(i => {
                                                 return (
-                                                    <>
-                                                        <tr>
-                                                            <td>{order._id}</td>
-                                                            <td></td>
-                                                            <td>{String(order.completed)}</td>
-                                                            <td>{order.total_price}</td>
-                                                        </tr>
-                                                    </>
+                                                    <tr className="text-start">
+                                                        <td>{i.product.name}</td>
+                                                        <td className="col-2"><img className="tableImage" src={'http://localhost:5000/' + i.product.image[0]} ></img></td>
+                                                        <td className="col">
+                                                            <div className="row text-muted"> &#x20A8; {i.product.price}</div>
+                                                        </td>
+                                                        <td className="col">
+                                                            {i.for == 'sell' ? (
+                                                                <>
+                                                                    <span className="ml-3 mr-3 p4">{i.quantity}</span>
+                                                                </>
+                                                            ) : <>1</>}
+                                                        </td>
+                                                        <td className="col">
+                                                            <div className="row text-muted"> &#x20A8; {i.price}</div>
+                                                        </td>
+                                                        <td className="col">
+                                                            <span className="close">{i.for}</span>
+                                                            {i.for == 'exchange' ? (
+                                                                <>
+                                                                    <h5 className="mt-4">Exchange for: </h5>
+                                                                    <div>{i.exchangeFor.name}</div>
+                                                                    <img className="" src={'http://localhost:5000/' + i.exchangeFor.image[0]} width="100px"></img>
+                                                                </>) : <></>}
+                                                        </td>
+                                                    </tr>
                                                 )
                                             })}
-
-
                                         </tbody>
                                     </table>
+                                    </div>
+
+                                    <h4>Checkout: </h4>
+                                    <span><h5>Address: {order.checkout.address}</h5> <h5>Phone: {order.checkout.phone}</h5></span>
+                                    {order.status == "completed" ? <h6>Completed</h6>: <></>  }
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </>
+                        )
+                    })}
+
+
                 </div>
             </div>
         )
