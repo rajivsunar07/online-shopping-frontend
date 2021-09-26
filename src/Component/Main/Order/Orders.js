@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {Link } from 'react-router-dom'
 
 export class Orders extends Component {
 
@@ -14,14 +15,12 @@ export class Orders extends Component {
     componentDidMount() {
         axios.get('/order/seller/ordered', { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
             .then(res => {
-                if (res.data.result.length > 0) {
-                    this.setState({
-                        ordersItems: res.data.result
-                    })
-                    console.log(this.state)
-                } else {
-                    console.log('No orders')
-                }
+                console.log(res.data.result)
+                this.setState({
+                    ordersItems: res.data.result
+                })
+
+                console.log(this.state)
             })
             .catch(err => {
                 console.log(err)
@@ -31,15 +30,17 @@ export class Orders extends Component {
     render() {
         return (
             <div>
-                 <div className="container mt-5">
+                <div className="container mt-5">
                     <div className="d-flex justify-content-center row">
-                        <div className="col-md-10">
+                        <div className="col-md-10 border shadow m-4 p-4">
+                            <h3>Order Items</h3>
+                            <hr/>
                             <div className="rounded">
                                 <div className="table-responsive table-borderless">
                                     <table className="table">
                                         <thead>
                                             <tr>
-                                                <th>Order #</th>
+                                                <th>Order Item #</th>
                                                 <th>Product name</th>
                                                 <th>Product image</th>
                                                 <th>Quantity</th>
@@ -53,8 +54,8 @@ export class Orders extends Component {
                                                     <>
                                                         <tr>
                                                             <td>{item._id}</td>
-                                                            <td>{item.product.name}</td>
-                                                            <td><img src={`http://localhost:5000/`+ item.product.image[0]} alt="" /></td>
+                                                            <td> <Link to={`/product/:${item.product._id}`}> {item.product.name}</Link></td>
+                                                            <td><img src={`http://localhost:5000/` + item.product.image[0]} alt="" /></td>
                                                             <td>{item.quantity}</td>
                                                             <td>{item.price}</td>
 
